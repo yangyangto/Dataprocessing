@@ -1,0 +1,7 @@
+What is a so called “branch” in Git terms and why would you use it?
+
+A branch is a pointer to one of the commits (snapshot of the content) that you've made. By default the branch is called Master, 
+it moves automatically to the last commit. This allows you to view your commit history (and adjust previous versions of your content etc.)   
+A new branch gives you a new pointer to move around with. 
+
+
