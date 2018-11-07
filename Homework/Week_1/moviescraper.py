@@ -11,7 +11,9 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 
-TARGET_URL = "https://www.imdb.com/search/title?title_type=feature&release_date=2008-01-01,2018-01-01&num_votes=5000,&sort=user_rating,desc"
+TARGET_URL = "https://www.imdb.com/search/title?title_type=feature" \
+             "&release_date=2008-01-01,2018-01-01&num_votes=5000,&" \
+             "sort=user_rating,desc"
 BACKUP_HTML = 'movies.html'
 OUTPUT_CSV = 'movies.csv'
 
@@ -37,22 +39,25 @@ def extract_movies(dom):
         # extract the title, rating and year
         title = (movie.find("a")).get_text()
         rating = (movie.find("strong")).get_text()
-        year = (movie.find("span", {"class" : "lister-item-year text-muted unbold"})).get_text()
+        year = (movie.find("span", {"class" :
+                "lister-item-year text-muted unbold"})).get_text()
 
         # strip non digit characters from year (brackets, II etc.)
         for char in year:
             if not char.isdigit():
                 year = year.strip(char)
 
-        # extract the cast of the movie and append to the temporary list of actors
+        # extract the name of actors and append to the temporary list of actors
         actors_list =[]
 
         for temp in movie.find_all("p", {"class" : ""}):
             actors_data = temp.find_all("a")
             for actor in actors_data:
-                actors_list.append(actor.get_text())
+                # only append if actor: exclude directors
+                if "_dr_" not in actor.get('href'):
+                    actors_list.append(actor.get_text())
 
-        # create a temporary string, where actors from actors_list are joined by a comma
+        # create a string, where actors from actors_list are joined by comma's
         actors = ", ".join(actors_list)
 
         # extract the movie runtime and strip 'min'
@@ -77,7 +82,8 @@ def save_csv(outfile, movies):
     # insert (5) different values for each movie into one row
     i = 0
     for _ in range(len(movies) // 5):
-        writer.writerow([movies[i], movies[i+1], movies[i+2], movies[i+3], movies[i+4]])
+        writer.writerow([movies[i], movies[i+1], movies[i+2],
+                        movies[i+3], movies[i+4]])
         i += 5
 
 def simple_get(url):
@@ -93,7 +99,8 @@ def simple_get(url):
             else:
                 return None
     except RequestException as e:
-        print('The following error occurred during HTTP GET request to {0} : {1}'.format(url, str(e)))
+        print('The following error occurred during HTTP GET request to {0} : {1}'
+        .format(url, str(e)))
         return None
 
 
