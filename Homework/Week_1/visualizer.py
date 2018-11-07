@@ -18,26 +18,26 @@ year_list =[]
 for year in range(START_YEAR, END_YEAR):
     year_list.append(year)
 
-def parse_data(infile, variable, y_list):
+def parse_data(infile, variable, average_list):
     """
     Parse data regarding the (IMDB) rating of movies
     """
     # dictionary for the data
     data_dict = {str(key): [] for key in range(START_YEAR, END_YEAR)}
 
-    # open inputfile and append the rating to the list of the according year
+    # open inputfile and append the values of the variable to the list of
+    # a certain year in the dictionary
     with open(infile) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             data_dict[row['Year']].append(float(row[variable]))
 
-    # create a list with the average rating of the movies per year
+    # append the average of the variable per year to another list
     for year in data_dict:
-        average_movie = average(data_dict[year])
-        y_list.append(average_movie)
+        average_list.append(average(data_dict[year]))
 
-    # return the average_list and year_list
-    return(y_list)
+    # return the list with averages
+    return average_list
 
 def average(lst):
     """
@@ -47,14 +47,14 @@ def average(lst):
 
 def plot_subplots(x_list, y_list, z_list):
     """
-    Plot the average (IMDB) rating and runtime of the (top 50) movies per year
+    Plot the average (IMDB) rating and runtime per year of the top 50 movies
     """
     # create a line chart with the average rating of the top movies per year
     # min rating = 0 and max = 10
     plot1 = plt.subplot(211)
     plt.plot(x_list, y_list, color = 'lightseagreen')
     plt.axis([START_YEAR, END_YEAR - 1, 0, 10])
-    plt.title('Average IMDB (top 50) Movie Rating per Year', fontsize=12)
+    plt.title('Average IMDB Movie Rating per Year', fontsize=12)
     plt.ylabel('Average Rating')
     plt.grid(True)
 
@@ -67,7 +67,7 @@ def plot_subplots(x_list, y_list, z_list):
     # create a line chart with the average runtime with shared x-axis
     plot2 = plt.subplot(212, sharex=plot1)
     plt.plot(x_list, z_list, color = 'lightseagreen')
-    plt.title('Average IMDB (top 50) Movie Runtime per Year', fontsize=12)
+    plt.title('Average IMDB Movie Runtime per Year', fontsize=12)
     plt.ylabel('Average Runtime (min)')
     plt.grid(True)
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # initialize the input file
     INPUT_CSV = "movies.csv"
 
-    # initialize the list with averages
+    # initialize the lists with averages
     average_rating = []
     average_runtime = []
 
