@@ -7,7 +7,6 @@ This script visualizes data obtained from a .csv file
 
 import csv
 import matplotlib.pyplot as plt
-from matplotlib.ticker import FormatStrFormatter
 
 # initialize first and last year globally
 START_YEAR = 2008
