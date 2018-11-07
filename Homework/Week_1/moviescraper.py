@@ -45,17 +45,15 @@ def extract_movies(dom):
                 year = year.strip(char)
 
         # extract the cast of the movie and append to the temporary list of actors
-        data_actors = movie.find_all("p", {"class" : ""})
         actors_list =[]
 
-        for actor in data_actors:
-            temps = actor.find_all("a")
-            for temp in temps:
-                actors_list.append(temp.get_text())
+        for temp in movie.find_all("p", {"class" : ""}):
+            actors_data = temp.find_all("a")
+            for actor in actors_data:
+                actors_list.append(actor.get_text())
 
         # create a temporary string, where actors from actors_list are joined by a comma
-        actors = ", "
-        actors = actors.join(actors_list)
+        actors = ", ".join(actors_list)
 
         # extract the movie runtime and strip 'min'
         runtime = (movie.find("span", {"class" : "runtime"})).get_text()

@@ -19,10 +19,10 @@ def parse_ratingdata(infile):
     """
     Parse data regarding the rating of movies
     """
-    # global dictionary for the data
+    # dictionary for the data
     data_dict = {str(key): [] for key in range(START_YEAR, END_YEAR)}
 
-    # open movies.csv and append the rating of a movie to the list of the according year
+    # open inputfile and append the rating of a movie to the list of the according year
     with open(INPUT_CSV) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -44,6 +44,9 @@ def average(lst):
     return sum(lst) / len(lst)
 
 def plot_rating(x_list, y_list):
+    """
+    Plot the average rating of the (top 50) movies per year
+    """
     # create a line chart with the average rating of the movies per year
     fig, ax = plt.subplots()
     plt.plot(x_list, y_list, color = 'lightseagreen')
@@ -51,9 +54,9 @@ def plot_rating(x_list, y_list):
     plt.ylabel('Average Rating')
     plt.xlabel('Year')
 
-    # define axes, including one ratings with one decimal on y-axis
+    # define axes, including one ratings (0 - 10) with one decimal on y-axis
     # and all years on the x-axis
-    plt.axis([START_YEAR, END_YEAR - 1, 0, 10])
+    plt.axis([START_YEAR, END_YEAR, 0, 10])
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     plt.xticks(x_list)
 
