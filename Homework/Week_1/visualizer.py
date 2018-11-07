@@ -92,5 +92,5 @@ if __name__ == "__main__":
     parse_data(INPUT_CSV, 'Rating', average_rating)
     parse_data(INPUT_CSV, 'Runtime', average_runtime)
 
-    # plot rating chart
+    # plot rating and runtime chart
     plot_subplots(year_list, average_rating, average_runtime)
