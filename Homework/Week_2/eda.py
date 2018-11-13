@@ -4,6 +4,7 @@ import csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 """
 This script does something, EDA
 """
@@ -25,75 +26,105 @@ def del_missings(data_frame):
     # data_frame.drop(data_frame.index[144])
     return data_frame
 
-def make_float(data_frame, colomn):
+def make_float(data_frame, column):
     """
-    Make values from a colomn type float.
+    Make values from a column type float.
     """
-    data_frame[colomn] = data_frame[colomn].str.replace(',', '.').astype(float)
+    data_frame[column] = data_frame[column].str.replace(',', '.').astype(float)
     return data_frame
 
-def preprocess_GDP(data_frame):
+def preprocess_data(data_frame):
     """
     Preprocess data for analyses
     """
+    # strip spaces on the right of all data in column Region
     data_frame['Region'] = data_frame['Region'].str.rstrip(" ")
+
+    # make data in column Population density and Infant mortality type float
     data_frame = make_float(data_frame, 'Pop. Density (per sq. mi.)')
     data_frame = make_float(data_frame, 'Infant mortality (per 1000 births)')
 
+    # strip 'dollars' from GDP data and make it type int
     GDP = data_frame['GDP ($ per capita) dollars']
     GDP = GDP.str.strip('dollars').astype(int)
 
+    # exclude/ mask (=make nan) outliers
     data_frame['GDP ($ per capita) dollars'] = GDP.mask(GDP > (GDP.mean() + GDP.std() * 3))
     data_frame = del_missings(data_frame)
-    # print(data_frame)
-    # data_frame['GDP ($ per capita) dollars'] = data_frame['GDP ($ per capita) dollars'].str.replace('dollars', '').astype(int)
+
     return data_frame
 
-def plot_GDP(data_frame):
+def plot_histogram(data_frame, column, xlabel):
     """
     Plot a histogram with the GDP data.
     """
-    n, bins, patches = plt.hist(data_frame['GDP ($ per capita) dollars'], bins='auto', color='lightseagreen',
-                            alpha=0.7, rwidth=0.85)
-    # plt.hist(data_frame['Region'], data_frame['GDP ($ per capita) dollars'])
-    # plt.axis([START_YEAR, END_YEAR - 1, 0, 10])
-    plt.title('GDP worldwide', fontsize=12)
-    plt.ylabel('Probability')
-    plt.xlabel('GDP ($ per capita) dollars')
+    # create an histogram with the GDP data
+    plt.hist(data_frame[column], bins='auto',
+             color='lightseagreen', alpha=0.7, rwidth=0.85)
+
+    # define axes, titles etc.
+    plt.title(column, fontsize=12)
+    plt.ylabel('Frequency')
+    plt.xlabel(xlabel)
     plt.grid(True)
     plt.show()
 
-def plot_infant_mort(data_frame):
+def plot_infant_mort(data_frame, column, title):
     """
-    Plot a boxplot with the Infant Mortality (per 1000 births).
+    Plot one boxplot with the Total Infant Mortality (per 1000 births)
+    and one where it's grouped by Region.
     """
-    # boxplot = data_frame.boxplot(column=['Infant mortality (per 1000 births)'])
-    df = pd.DataFrame(np.random.rand(10,5))
-    bp = df.boxplot()
+    # create a boxplot with total infant mortality
+    data_frame.boxplot(column=[column], grid=False)
+    name = 'Total '+ title
+    plt.title(name)
+    plt.ylabel(column)
 
+    # create a boxplot with infant mortality per region
+    data_frame.boxplot(column=[column], by='Region', grid=False, rot=75)
+    name = title + ' per Region'
+    plt.title(name)
+    plt.ylabel(column)
 
-def CT(data_frame):
-        print(data_frame['GDP ($ per capita) dollars'].mean())
-        print(data_frame['GDP ($ per capita) dollars'].median())
-        print(data_frame['GDP ($ per capita) dollars'].mode())
-        print(data_frame['GDP ($ per capita) dollars'].std())
-        # print(df_values_only['GDP ($ per capita) dollars'].max())
+    # show boxplots with the infant mortality data
+    plt.show()
+
+def central_tendency(data_frame, column):
+        print('Central tendency')
+        print('mean :   ', data_frame[column].mean())
+        print('median : ', data_frame[column].median())
+        print('mode :   ', data_frame[column].mode())
+        print('stdev. : ', data_frame[column].std(), '\n')
+
+def five_number(data_frame, column):
+        print('Count, Mean, std and the Five Number Summary')
+        print(data_frame[column].describe())
+
+def create_json(data_frame):
+        outfile = data_frame.to_json(orient='index')
+        # print(out)
+        with open('eda.json', 'w') as f:
+            f.write(outfile)
 
 if __name__ == "__main__":
     INPUT_CSV = "input.csv"
     df = parse_data(INPUT_CSV)
     df_values_only = del_missings(df)
-    df_values_only = preprocess_GDP(df_values_only)
+    df_values_only = preprocess_data(df_values_only)
+    central_tendency(df_values_only, 'GDP ($ per capita) dollars')
+    five_number(df_values_only, 'Infant mortality (per 1000 births)')
 
- #Suriname 144
+    # plot_histogram(df_values_only, 'GDP ($ per capita) dollars', 'GDP in dollars')
+    # plot_infant_mort(df_values_only, 'Infant mortality (per 1000 births)', 'Infant Mortality')
 
-    # print(df_values_only.iloc[144][0], df_values_only.iloc[144][8])
-    plot_GDP(df_values_only)
+    create_json(df_values_only)
+
+     #Suriname 144
 
 
+# print(df_values_only.iloc[144][0], df_values_only.iloc[144][8])
 
-
-
+# data_frame['GDP ($ per capita) dollars'] = data_frame['GDP ($ per capita) dollars'].str.replace('dollars', '').astype(int)
 
 #
 # def del_missings(data_frame):
@@ -108,7 +139,7 @@ if __name__ == "__main__":
 #                 break
 #     return data_frame
 
-# def make_int(data_frame, old_colomn, colomn):
-#     data_frame[colomn] = data_frame[colomn].apply(int)
-#     data_frame[old_colomn] = data_frame[colomn]
+# def make_int(data_frame, old_column, column):
+#     data_frame[column] = data_frame[column].apply(int)
+#     data_frame[old_column] = data_frame[column]
 #     return data_frame
