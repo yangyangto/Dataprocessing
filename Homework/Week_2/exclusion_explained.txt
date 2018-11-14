@@ -1,0 +1,10 @@
+Reasons for exclusion
+
+To ensure the dataset is as complete as possible, multiple rows are excluded/
+removed from the dataframe due to empty cells (NaN) or 'unknown' value.
+When analysing the GDP data, it appeared that the GDP of Suriname was extremely
+high compared to the GDP of other countries. This is likely a measurement or
+data entry error.
+The outliers in 'Infant Mortality' are not excluded, because these outliers are
+likely to be 'true', e.g. higher Infant Mortality in third world countries,
+such as Angola.
