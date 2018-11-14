@@ -15,6 +15,8 @@ def parse_data(infile):
     """
     data = pd.read_csv(infile)
     df = pd.DataFrame(data)
+    df = df[['Country', 'Region', 'Pop. Density (per sq. mi.)',
+             'Infant mortality (per 1000 births)','GDP ($ per capita) dollars']]
     return df
 
 def del_missings(data_frame):
@@ -22,8 +24,6 @@ def del_missings(data_frame):
     Remove the entire row when it consist a missing value/ 'unknown'.
     """
     data_frame = data_frame.replace('unknown', np.nan).dropna(how='any')
-    # data_frame = data_frame[data_frame.Country != 'Suriname']
-    # data_frame.drop(data_frame.index[144])
     return data_frame
 
 def make_float(data_frame, column):
@@ -46,17 +46,20 @@ def preprocess_data(data_frame):
 
     # strip 'dollars' from GDP data and make it type int
     GDP = data_frame['GDP ($ per capita) dollars']
-    GDP = GDP.str.strip('dollars').astype(int)
+    data_frame['GDP ($ per capita) dollars'] = GDP.str.strip('dollars').astype(int)
 
-    # exclude/ mask (=make nan) outliers
-    data_frame['GDP ($ per capita) dollars'] = GDP.mask(GDP > (GDP.mean() + GDP.std() * 3))
+    return data_frame
+
+def exclude_outliers(data_frame, column):
+    df_column = data_frame[column]
+    data_frame[column] = df_column.mask(df_column > (df_column.mean() + df_column.std() * 3))
     data_frame = del_missings(data_frame)
 
     return data_frame
 
 def plot_histogram(data_frame, column, xlabel):
     """
-    Plot a histogram with the GDP data.
+    Plot a histogram.
     """
     # create an histogram with the GDP data
     plt.hist(data_frame[column], bins='auto',
@@ -90,34 +93,43 @@ def plot_infant_mort(data_frame, column, title):
     plt.show()
 
 def central_tendency(data_frame, column):
-        print('Central tendency')
+        print('Central tendency of', column)
         print('mean :   ', data_frame[column].mean())
         print('median : ', data_frame[column].median())
         print('mode :   ', data_frame[column].mode())
         print('stdev. : ', data_frame[column].std(), '\n')
 
 def five_number(data_frame, column):
-        print('Count, Mean, std and the Five Number Summary')
+        print('Count, Mean, std and the Five Number Summary of', column)
         print(data_frame[column].describe())
 
-def create_json(data_frame):
+def convert_json(data_frame):
+        # sets Country as index
+        data_frame = data_frame.set_index(['Country'])
+
+        # convert df to json format using the (new) index as key
         outfile = data_frame.to_json(orient='index')
-        # print(out)
+
         with open('eda.json', 'w') as f:
             f.write(outfile)
 
 if __name__ == "__main__":
     INPUT_CSV = "input.csv"
     df = parse_data(INPUT_CSV)
+
     df_values_only = del_missings(df)
     df_values_only = preprocess_data(df_values_only)
+    plot_histogram(df_values_only, 'GDP ($ per capita) dollars', 'GDP in dollars')
+
+    df_values_only = exclude_outliers(df_values_only, 'GDP ($ per capita) dollars')
+    plot_histogram(df_values_only, 'GDP ($ per capita) dollars', 'GDP in dollars')
+
     central_tendency(df_values_only, 'GDP ($ per capita) dollars')
     five_number(df_values_only, 'Infant mortality (per 1000 births)')
 
-    # plot_histogram(df_values_only, 'GDP ($ per capita) dollars', 'GDP in dollars')
-    # plot_infant_mort(df_values_only, 'Infant mortality (per 1000 births)', 'Infant Mortality')
+    plot_infant_mort(df_values_only, 'Infant mortality (per 1000 births)', 'Infant Mortality')
 
-    create_json(df_values_only)
+    convert_json(df_values_only)
 
      #Suriname 144
 
