@@ -1,0 +1,41 @@
+<!-- Name: Yang Yang To, Student number:10340238 -->
+<!-- This file will plot a line chart of the employment ratio of men and women with JavaScript. -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Employment ratio Men vs Women</title>
+  </head>
+
+  <body>
+
+      <canvas>CANVAS</canvas>
+      <script>
+        var fileName = "employmentMenWomen.json";
+        var txtFile = new XMLHttpRequest();
+        txtFile.onreadystatechange = function() {
+          if (txtFile.readyState === 4 && txtFile.status == 200) {
+            var employment = JSON.parse(txtFile.responseText);
+            var men_datalist = [];
+            var women_datalist =[];
+            for (const key in employment) {
+              men_data = employment[key]['LNU02300001'];
+              men_datalist.push(men_data);
+              women_data = employment[key]['LNS12300002'];
+              women_datalist.push(women_data);
+            }
+            console.log(men_datalist);
+            console.log(women_datalist);
+          }
+        }
+        txtFile.open("GET", fileName);
+        txtFile.send();
+      </script>
+
+  </body>
+</html>
+
+
+<!--
+A <head> tag with a <title> tag
+A <body> with a <canvas> element as well as a <script> -->

@@ -10,8 +10,10 @@ import matplotlib.pyplot as plt
 This script does something, CHANGE THIS!!!
 """
 
-def parse_data(infile):
-    data = pd.read_csv(infile)
+def parse_data(infile1, infile2):
+    data = pd.read_csv(infile1)
+    second_data = pd.read_csv(infile2)
+    data['LNS12300002'] = second_data.LNS12300002
     data_frame = pd.DataFrame(data)
 
     return data_frame
@@ -26,15 +28,12 @@ def convert_json(data_frame, title):
 if __name__ == "__main__":
     # parse data from inputfile
     INPUT_CSV_men = "Employment_men.csv"
-    df_men = parse_data(INPUT_CSV_men)
-    print(df_men)
-
     INPUT_CSV_women = "Employment_women.csv"
-    df_women = parse_data(INPUT_CSV_women)
-    print(df_women)
+    df = parse_data(INPUT_CSV_men, INPUT_CSV_women)
+    print(df)
 
-    convert_json(df_men, 'employment_men.json')
-    convert_json(df_women, 'employment_women.json')
+    convert_json(df, 'employmentMenWomen.json')
+    # convert_json(df_women, 'employment_women.json')
 
 
     # df.boxplot(column='Value', by='LOCATION', rot=90)

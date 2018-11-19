@@ -8,8 +8,8 @@ are not taken into account, meaning that if two values are not the same type
 
 2. Explain what a closure is. (Note that JavaScript programs use closures very often)
 Variables can have a global or a local scope. By defining a function within
-another function (=closures) outer function's scope can be accessed from an
-inner function.
+another function (=closures) outer function's variables can be accessed from an
+inner function.?????
 
 3. Explain what higher order functions are.
 A higher-order function is a function that either takes another function as an
