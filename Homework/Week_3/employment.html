@@ -1,6 +1,6 @@
 <!-- Name: Yang Yang To, Student number:10340238 -->
 <!-- This file will plot a line chart of the employment ratio
-of men and women with JavaScript. -->
+of men and women in the US with JavaScript. -->
 
 <!DOCTYPE html>
 <html>
@@ -22,8 +22,8 @@ of men and women with JavaScript. -->
         if (txtFile.readyState === 4 && txtFile.status == 200) {
           var employment = JSON.parse(txtFile.responseText);
           for (const key in employment) {
-            men_data = employment[key];
-            datalist.push(men_data);
+            data = employment[key];
+            datalist.push(data);
           }
         }
 
@@ -31,29 +31,33 @@ of men and women with JavaScript. -->
         var ctx = canvas.getContext('2d');
         ctx.strokeStyle = "black";
 
-        // create axes and lables
+        // create axes
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(70,100);
-        ctx.lineTo(70,500);
-        ctx.lineTo(800,500);
+        ctx.lineTo(70,500); // y-axis
+        ctx.lineTo(800,500); //x-axis
         ctx.stroke();
+
+        // create labels
         ctx.font = "30px Calibri";
-        ctx.fillText("Employment Percentage Men vs. Women in the US", 130, 50);
+        ctx.fillText("Percentage Employed Men vs. Women in the US", 130, 50);
         ctx.font = "20px Calibri";
         ctx.fillText("Year", 450, 560);
         ctx.rotate(-Math.PI / 2);
         ctx.fillText("Percentage Employed (%)", -400, 20);
         ctx.rotate(Math.PI / 2);
 
-        // create x and y transformation
+        // create x and y transformations
         var ytransform = createTransform([0, 100], [100, 500]);
         var xtransform = createTransform([0, 71], [70, 800]);
 
         // create line graph for men's data
-        ctx.beginPath();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "rgb(180,137,172)";
+        ctx.font = "15px Calibri";
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(32,178,170)";
         ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNU02300001']));
         var counter = 1;
         datalist.forEach(function(element) {
@@ -62,9 +66,16 @@ of men and women with JavaScript. -->
           ctx.stroke();
         });
 
+        // create legend for men
+        ctx.fillText("Men", 700, 405);
+        ctx.beginPath();
+        ctx.moveTo(670,400);
+        ctx.lineTo(690,400);
+        ctx.stroke();
+
         // create line graph for women's data
         ctx.beginPath();
-        ctx.strokeStyle = "rgb(32,178,170)";
+        ctx.strokeStyle = "rgb(180,137,172)";
         ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNS12300002']));
         var counter = 1;
         datalist.forEach(function(element) {
@@ -73,37 +84,34 @@ of men and women with JavaScript. -->
           ctx.stroke();
         });
 
-        // Initializing layout of ticks
-        ctx.textAlign = "right"
-        ctx.textBaseline = "middle";
-        ctx.font = "15px Calibri";
-
-        // create ticks on y-axis
-        for(var i = 0; i <= 100; i += 10) {
-            ctx.fillText(i, 60, (500 - i * 4));
-        }
-
-        // create ticks on x-axis
-        for (var j = 0; j < 71; j+= 10){
-          ctx.fillText(j + 1948, 85 + j * 10.5, 520)
-        }
-
-        ctx.textAlign = "left"
-
-        // create legend
-        ctx.strokeStyle = "rgb(180,137,172)";
-        ctx.fillText("Men", 700, 400);
-        ctx.beginPath();
-        ctx.moveTo(670,400);
-        ctx.lineTo(690,400);
-        ctx.stroke();
-
-        ctx.strokeStyle = "rgb(32,178,170)";
-        ctx.fillText("Women", 700, 420);
+        // create legend for women
+        ctx.fillText("Women", 700, 425);
         ctx.beginPath();
         ctx.moveTo(670,420);
         ctx.lineTo(690,420);
         ctx.stroke();
+
+        // Initializing layout of ticks
+        ctx.textAlign = "right"
+        ctx.textBaseline = "middle";
+        ctx.strokeStyle = "black";
+
+        // create ticks on y-axis
+        for(var i = 0; i <= 100; i += 10) {
+            ctx.fillText(i, 57, (500 - i * 4));
+            ctx.beginPath();
+            ctx.moveTo(63, (500 - i * 4));
+            ctx.lineTo(70, (500 - i * 4));
+            ctx.stroke();
+        }
+
+        // create ticks on x-axis
+        for (var j = 0; j < 71; j+= 10){
+          ctx.fillText(j + 1948, 85 + j * 10.4, 520)
+          ctx.moveTo(70 + j * 10.4, 500);
+          ctx.lineTo(70 + j * 10.4, 508);
+          ctx.stroke();
+        }
 
         // write text
         ctx.fillText("Name: Yang Yang To", 50, 630);
