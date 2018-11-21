@@ -1,7 +1,7 @@
 # Dataprocessing
 
 ## Week 1: Moviescraper 
-Extractng data of the IMDB website and creates two line graphs (average rating and runtime).
+Extractng data from the IMDB website and creates two line graphs (average rating and runtime).
 
 ## Week 2: EDA
 Computing Central Tendency, Five Number Summary and visualizing the input data (boxplots and histograms). 
