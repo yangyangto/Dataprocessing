@@ -1,5 +1,6 @@
 <!-- Name: Yang Yang To, Student number:10340238 -->
-<!-- This file will plot a line chart of the employment ratio of men and women with JavaScript. -->
+<!-- This file will plot a line chart of the employment ratio
+of men and women with JavaScript. -->
 
 <!DOCTYPE html>
 <html>
@@ -8,34 +9,131 @@
   </head>
 
   <body>
+    <canvas
+      id="myCanvas" width="1000" height="800">
+    </canvas>
 
-      <canvas>CANVAS</canvas>
-      <script>
-        var fileName = "employmentMenWomen.json";
-        var txtFile = new XMLHttpRequest();
-        txtFile.onreadystatechange = function() {
-          if (txtFile.readyState === 4 && txtFile.status == 200) {
-            var employment = JSON.parse(txtFile.responseText);
-            var men_datalist = [];
-            var women_datalist =[];
-            for (const key in employment) {
-              men_data = employment[key]['LNU02300001'];
-              men_datalist.push(men_data);
-              women_data = employment[key]['LNS12300002'];
-              women_datalist.push(women_data);
-            }
-            console.log(men_datalist);
-            console.log(women_datalist);
+    <script>
+      // parse in data and append (push) to a list
+      var fileName = "employment.json";
+      var txtFile = new XMLHttpRequest();
+      var datalist = [];
+      txtFile.onreadystatechange = function() {
+        if (txtFile.readyState === 4 && txtFile.status == 200) {
+          var employment = JSON.parse(txtFile.responseText);
+          for (const key in employment) {
+            men_data = employment[key];
+            datalist.push(men_data);
           }
         }
-        txtFile.open("GET", fileName);
-        txtFile.send();
-      </script>
 
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        ctx.strokeStyle = "black";
+
+        // create axes and lables
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(70,100);
+        ctx.lineTo(70,500);
+        ctx.lineTo(800,500);
+        ctx.stroke();
+        ctx.font = "30px Calibri";
+        ctx.fillText("Employment Percentage Men vs. Women", 170, 50);
+        ctx.font = "20px Calibri";
+        ctx.fillText("Year", 450, 560);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText("Percentage Employed (%)", -400, 20);
+        ctx.rotate(Math.PI / 2);
+
+        // create x and y transformation
+        var ytransform = createTransform([0, 100], [100, 500]);
+        var xtransform = createTransform([0, 71], [70, 800]);
+
+        // create line graph for men's data
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgb(180,137,172)";
+        ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNU02300001']));
+        var counter = 1;
+        datalist.forEach(function(element) {
+          counter += 1;
+          ctx.lineTo(xtransform(counter), ytransform(100 - element['LNU02300001']));
+          ctx.stroke();
+        });
+
+        // create line graph for women's data
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(32,178,170)";
+        ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNS12300002']));
+        var counter = 1;
+        datalist.forEach(function(element) {
+          counter += 1;
+          ctx.lineTo(xtransform(counter), ytransform(100 - element['LNS12300002']));
+          ctx.stroke();
+        });
+
+        // Initializing layout of ticks
+        ctx.textAlign = "right"
+        ctx.textBaseline = "middle";
+        ctx.font = "15px Calibri";
+
+        // create ticks on y-axis
+        for(var i = 0; i <= 100; i += 10) {
+            ctx.fillText(i, 60, (500 - i * 4));
+        }
+
+        // create ticks on x-axis
+        for (var j = 0; j < 71; j+= 10){
+          ctx.fillText(j + 1948, 85 + j * 10.5, 520)
+        }
+
+        ctx.textAlign = "left"
+
+        // create legend
+        ctx.strokeStyle = "rgb(180,137,172)";
+        ctx.fillText("Men", 700, 400);
+        ctx.beginPath();
+        ctx.moveTo(670,400);
+        ctx.lineTo(690,400);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgb(32,178,170)";
+        ctx.fillText("Women", 700, 420);
+        ctx.beginPath();
+        ctx.moveTo(670,420);
+        ctx.lineTo(690,420);
+        ctx.stroke();
+
+        // write text
+        ctx.fillText("Name: Yang Yang To", 50, 630);
+        ctx.fillText("Student Number: 10340238", 50, 650);
+        ctx.fillText("Assignment: Data Line Chart, JS", 50, 670);
+        ctx.fillText("Data source (Men): https://fred.stlouisfed.org/series/LNU02300001", 50, 690);
+        ctx.fillText("Data source (Women): https://fred.stlouisfed.org/series/LNS12300002#0", 50, 710);
+
+      }
+      txtFile.open("GET", fileName);
+      txtFile.send();
+
+      function createTransform(domain, range){
+    	// transforms data to specific coordinates on the screen using
+      // a linear function.
+
+        var domain_min = domain[0]
+        var domain_max = domain[1]
+        var range_min = range[0]
+        var range_max = range[1]
+
+        // formulas to calculate the alpha and the beta
+       	var alpha = (range_max - range_min) / (domain_max - domain_min)
+        var beta = range_max - alpha * domain_max
+
+        // returns the function for the linear transformation (y= a * x + b)
+        return function(x){
+          return alpha * x + beta;
+        }
+      }
+    </script>
   </body>
 </html>
-
-
-<!--
-A <head> tag with a <title> tag
-A <body> with a <canvas> element as well as a <script> -->

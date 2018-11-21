@@ -32,7 +32,7 @@ if __name__ == "__main__":
     df = parse_data(INPUT_CSV_men, INPUT_CSV_women)
     print(df)
 
-    convert_json(df, 'employmentMenWomen.json')
+    convert_json(df, 'employment.json')
     # convert_json(df_women, 'employment_women.json')
 
 

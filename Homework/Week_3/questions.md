@@ -1,0 +1,21 @@
+Q & A
+
+1. Explain the difference between the == operator and the === operator.
+Both operators are used to compare for equality, but for the === operator the
+data type must be identical to be considered equal. For the == operator data type
+are not taken into account, meaning that if two values are not the same type
+=== will simply return false, whereas == will return True.
+
+2. Explain what a closure is. (Note that JavaScript programs use closures very often)
+Variables can have a global or a local scope. By defining a function within
+another function (=closures) outer function's variables can be accessed from an
+inner function.?????
+
+3. Explain what higher order functions are.
+A higher-order function is a function that either takes another function as an
+argument or returns a function.
+
+4. Explain what a query selector is and give an example line of JavaScript that uses a query selector.
+It returns the first element that matches a specified CSS selector in a document.
+
+file.querySelector("p");  this will give the first element matching <p> in file.
