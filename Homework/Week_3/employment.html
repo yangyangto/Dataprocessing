@@ -105,8 +105,8 @@ of men and women in the US with JavaScript. -->
               ctx.stroke();
           }
 
-          // create ticks on x-axis
-          for (var j = 0; j < 71; j+= 10){
+          // create ticks on x-axis (every ten years)
+          for (var j = 0; j < dataList.length; j += 10){
             ctx.fillText(j + 1948, 85 + j * 10.4, 520)
             ctx.moveTo(70 + j * 10.4, 500);
             ctx.lineTo(70 + j * 10.4, 508);
