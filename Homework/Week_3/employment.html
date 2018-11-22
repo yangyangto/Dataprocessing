@@ -17,110 +17,110 @@ of men and women in the US with JavaScript. -->
       // parse in data and append (push) to a list
       var fileName = "employment.json";
       var txtFile = new XMLHttpRequest();
-      var datalist = [];
+      var dataList = [];
       txtFile.onreadystatechange = function() {
         if (txtFile.readyState === 4 && txtFile.status == 200) {
           var employment = JSON.parse(txtFile.responseText);
           for (const key in employment) {
             data = employment[key];
-            datalist.push(data);
+            dataList.push(data);
           }
-        }
 
-        var canvas = document.getElementById('myCanvas');
-        var ctx = canvas.getContext('2d');
-        ctx.strokeStyle = "black";
 
-        // create axes
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(70,100);
-        ctx.lineTo(70,500); // y-axis
-        ctx.lineTo(800,500); //x-axis
-        ctx.stroke();
+          var canvas = document.getElementById('myCanvas');
+          var ctx = canvas.getContext('2d');
+          ctx.strokeStyle = "black";
 
-        // create labels
-        ctx.font = "30px Calibri";
-        ctx.fillText("Percentage Employed Men vs. Women in the US", 130, 50);
-        ctx.font = "20px Calibri";
-        ctx.fillText("Year", 450, 560);
-        ctx.rotate(-Math.PI / 2);
-        ctx.fillText("Percentage Employed (%)", -400, 20);
-        ctx.rotate(Math.PI / 2);
-
-        // create x and y transformations
-        var ytransform = createTransform([0, 100], [100, 500]);
-        var xtransform = createTransform([0, 71], [70, 800]);
-
-        // create line graph for men's data
-        ctx.lineWidth = 2;
-        ctx.font = "15px Calibri";
-
-        ctx.beginPath();
-        ctx.strokeStyle = "rgb(32,178,170)";
-        ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNU02300001']));
-        var counter = 1;
-        datalist.forEach(function(element) {
-          counter += 1;
-          ctx.lineTo(xtransform(counter), ytransform(100 - element['LNU02300001']));
+          // create axes
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(70,100);
+          ctx.lineTo(70,500); // y-axis
+          ctx.lineTo(800,500); //x-axis
           ctx.stroke();
-        });
 
-        // create legend for men
-        ctx.fillText("Men", 700, 405);
-        ctx.beginPath();
-        ctx.moveTo(670,400);
-        ctx.lineTo(690,400);
-        ctx.stroke();
+          // create labels
+          ctx.font = "30px Calibri";
+          ctx.fillText("Percentage Employed Men vs. Women in the US", 130, 50);
+          ctx.font = "20px Calibri";
+          ctx.fillText("Year", 450, 560);
+          ctx.rotate(-Math.PI / 2);
+          ctx.fillText("Percentage Employed (%)", -400, 20);
+          ctx.rotate(Math.PI / 2);
 
-        // create line graph for women's data
-        ctx.beginPath();
-        ctx.strokeStyle = "rgb(180,137,172)";
-        ctx.moveTo(xtransform(0), ytransform(100 - datalist[0]['LNS12300002']));
-        var counter = 1;
-        datalist.forEach(function(element) {
-          counter += 1;
-          ctx.lineTo(xtransform(counter), ytransform(100 - element['LNS12300002']));
-          ctx.stroke();
-        });
+          // create x and y transformations
+          var ytransform = createTransform([0, 100], [100, 500]);
+          var xtransform = createTransform([0, 71], [70, 800]);
 
-        // create legend for women
-        ctx.fillText("Women", 700, 425);
-        ctx.beginPath();
-        ctx.moveTo(670,420);
-        ctx.lineTo(690,420);
-        ctx.stroke();
+          // create line graph for men's data
+          ctx.lineWidth = 2;
+          ctx.font = "15px Calibri";
 
-        // Initializing layout of ticks
-        ctx.textAlign = "right"
-        ctx.textBaseline = "middle";
-        ctx.strokeStyle = "black";
-
-        // create ticks on y-axis
-        for(var i = 0; i <= 100; i += 10) {
-            ctx.fillText(i, 57, (500 - i * 4));
-            ctx.beginPath();
-            ctx.moveTo(63, (500 - i * 4));
-            ctx.lineTo(70, (500 - i * 4));
+          ctx.beginPath();
+          ctx.strokeStyle = "rgb(32,178,170)";
+          ctx.moveTo(xtransform(0), ytransform(100 - dataList[0]['LNU02300001']));
+          var counter = 1;
+          dataList.forEach(function(element) {
+            counter += 1;
+            ctx.lineTo(xtransform(counter), ytransform(100 - element['LNU02300001']));
             ctx.stroke();
-        }
+          });
 
-        // create ticks on x-axis
-        for (var j = 0; j < 71; j+= 10){
-          ctx.fillText(j + 1948, 85 + j * 10.4, 520)
-          ctx.moveTo(70 + j * 10.4, 500);
-          ctx.lineTo(70 + j * 10.4, 508);
+          // create legend for men
+          ctx.fillText("Men", 700, 405);
+          ctx.beginPath();
+          ctx.moveTo(670,400);
+          ctx.lineTo(690,400);
           ctx.stroke();
+
+          // create line graph for women's data
+          ctx.beginPath();
+          ctx.strokeStyle = "rgb(180,137,172)";
+          ctx.moveTo(xtransform(0), ytransform(100 - dataList[0]['LNS12300002']));
+          var counter = 1;
+          dataList.forEach(function(element) {
+            counter += 1;
+            ctx.lineTo(xtransform(counter), ytransform(100 - element['LNS12300002']));
+            ctx.stroke();
+          });
+
+          // create legend for women
+          ctx.fillText("Women", 700, 425);
+          ctx.beginPath();
+          ctx.moveTo(670,420);
+          ctx.lineTo(690,420);
+          ctx.stroke();
+
+          // Initializing layout of ticks
+          ctx.textAlign = "right"
+          ctx.textBaseline = "middle";
+          ctx.strokeStyle = "black";
+
+          // create ticks on y-axis
+          for(var i = 0; i <= 100; i += 10) {
+              ctx.fillText(i, 57, (500 - i * 4));
+              ctx.beginPath();
+              ctx.moveTo(63, (500 - i * 4));
+              ctx.lineTo(70, (500 - i * 4));
+              ctx.stroke();
+          }
+
+          // create ticks on x-axis
+          for (var j = 0; j < 71; j+= 10){
+            ctx.fillText(j + 1948, 85 + j * 10.4, 520)
+            ctx.moveTo(70 + j * 10.4, 500);
+            ctx.lineTo(70 + j * 10.4, 508);
+            ctx.stroke();
+          }
+
+          // write text
+          ctx.textAlign = "left"
+          ctx.fillText("Name: Yang Yang To", 50, 630);
+          ctx.fillText("Student Number: 10340238", 50, 650);
+          ctx.fillText("Assignment: Data Line Chart, JS", 50, 670);
+          ctx.fillText("Data source (Men): https://fred.stlouisfed.org/series/LNU02300001", 50, 690);
+          ctx.fillText("Data source (Women): https://fred.stlouisfed.org/series/LNS12300002#0", 50, 710);
         }
-
-        // write text
-        ctx.textAlign = "left"
-        ctx.fillText("Name: Yang Yang To", 50, 630);
-        ctx.fillText("Student Number: 10340238", 50, 650);
-        ctx.fillText("Assignment: Data Line Chart, JS", 50, 670);
-        ctx.fillText("Data source (Men): https://fred.stlouisfed.org/series/LNU02300001", 50, 690);
-        ctx.fillText("Data source (Women): https://fred.stlouisfed.org/series/LNS12300002#0", 50, 710);
-
       }
       txtFile.open("GET", fileName);
       txtFile.send();
@@ -129,14 +129,14 @@ of men and women in the US with JavaScript. -->
     	// transforms data to specific coordinates on the screen using
       // a linear function.
 
-        var domain_min = domain[0]
-        var domain_max = domain[1]
-        var range_min = range[0]
-        var range_max = range[1]
+        var domain_min = domain[0];
+        var domain_max = domain[1];
+        var range_min = range[0];
+        var range_max = range[1];
 
         // formulas to calculate the alpha and the beta
-       	var alpha = (range_max - range_min) / (domain_max - domain_min)
-        var beta = range_max - alpha * domain_max
+       	var alpha = (range_max - range_min) / (domain_max - domain_min);
+        var beta = range_max - alpha * domain_max;
 
         // returns the function for the linear transformation (y= a * x + b)
         return function(x){
