@@ -15,7 +15,7 @@ of men and women in the US with JavaScript. -->
 
     <script>
       // parse in data and append (push) to a list
-      var fileName = "employment.json";
+      var fileName = "employed.json";
       var txtFile = new XMLHttpRequest();
       var dataList = [];
       txtFile.onreadystatechange = function() {
@@ -25,7 +25,6 @@ of men and women in the US with JavaScript. -->
             data = employment[key];
             dataList.push(data);
           }
-
 
           var canvas = document.getElementById('myCanvas');
           var ctx = canvas.getContext('2d');
@@ -41,7 +40,8 @@ of men and women in the US with JavaScript. -->
 
           // create labels
           ctx.font = "30px Calibri";
-          ctx.fillText("Percentage Employed Men vs. Women in the US", 130, 50);
+          ctx.fillText("Percentage Employed Men vs. Women in the US (1984 - 2017)",
+                       50, 50);
           ctx.font = "20px Calibri";
           ctx.fillText("Year", 450, 560);
           ctx.rotate(-Math.PI / 2);
@@ -50,7 +50,7 @@ of men and women in the US with JavaScript. -->
 
           // create x and y transformations
           var ytransform = createTransform([0, 100], [100, 500]);
-          var xtransform = createTransform([0, 71], [70, 800]);
+          var xtransform = createTransform([0, dataList.length], [70, 800]);
 
           // create line graph for men's data
           ctx.lineWidth = 2;
@@ -104,12 +104,12 @@ of men and women in the US with JavaScript. -->
               ctx.lineTo(70, (500 - i * 4));
               ctx.stroke();
           }
-
+          console.log(dataList.length);
           // create ticks on x-axis (every ten years)
           for (var j = 0; j < dataList.length; j += 10){
-            ctx.fillText(j + 1948, 85 + j * 10.4, 520)
-            ctx.moveTo(70 + j * 10.4, 500);
-            ctx.lineTo(70 + j * 10.4, 508);
+            ctx.fillText(j + 1948, 85 + j * 10.5, 520)
+            ctx.moveTo(70 + j * 10.5, 500);
+            ctx.lineTo(70 + j * 10.5, 508);
             ctx.stroke();
           }
 
@@ -118,8 +118,10 @@ of men and women in the US with JavaScript. -->
           ctx.fillText("Name: Yang Yang To", 50, 630);
           ctx.fillText("Student Number: 10340238", 50, 650);
           ctx.fillText("Assignment: Data Line Chart, JS", 50, 670);
-          ctx.fillText("Data source (Men): https://fred.stlouisfed.org/series/LNU02300001", 50, 690);
-          ctx.fillText("Data source (Women): https://fred.stlouisfed.org/series/LNS12300002#0", 50, 710);
+          ctx.fillText("Source (Men): https://fred.stlouisfed.org/series/LNU02300001",
+                       50, 690);
+          ctx.fillText("Source (Women): https://fred.stlouisfed.org/series/LNS12300002#0",
+                       50, 710);
         }
       }
       txtFile.open("GET", fileName);
