@@ -7,5 +7,5 @@ Extractng data from the IMDB website and creates two line graphs (average rating
 Computing Central Tendency, Five Number Summary and visualizing the input data (boxplots and histograms). 
 
 ## Week 3: Data Line Chart
-Creating a website with a line chart with the employment ratio of Men vs. Women in the US between 1984 -2018.
+Creating a website with a line chart with the employment ratio of Men vs. Women in the US between 1984 -2017.
 https://yangyangto.github.io/Dataprocessing/
