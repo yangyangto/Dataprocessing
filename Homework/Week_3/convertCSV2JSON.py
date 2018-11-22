@@ -9,13 +9,13 @@ import json
 Convert CSV file to JSON file.
 """
 
-def parse_data(infile1, infile2):
+def parse_data(infile1, infile2, column):
     """
     Parse data from two infiles into a dataframe.
     """
     data = pd.read_csv(infile1)
     second_data = pd.read_csv(infile2)
-    data['LNS12300002'] = second_data.LNS12300002
+    data[column] = second_data[column]
     data_frame = pd.DataFrame(data)
 
     return data_frame
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # parse data from inputfiles
     INPUT_CSV_men = "Employment_men.csv"
     INPUT_CSV_women = "Employment_women.csv"
-    df = parse_data(INPUT_CSV_men, INPUT_CSV_women)
+    df = parse_data(INPUT_CSV_men, INPUT_CSV_women, 'LNS12300002')
 
     # convert into json format
     convert_json(df, 'employment.json')
