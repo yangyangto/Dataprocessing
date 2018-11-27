@@ -22,7 +22,6 @@ d3.select("body").append("p").text("Source: Kaggle");
 // parse in data from csv and fill in datalists
 d3.csv('Happiness2017.csv').then(function(data) {
   for (const row in data) {
-    // dataDict[data[row]['Country']] = Number(data[row]['Happiness.Score']);
     country = data[row]['Country'];
     countrylist.push(country);
     score = Number(data[row]['Happiness.Score']);
