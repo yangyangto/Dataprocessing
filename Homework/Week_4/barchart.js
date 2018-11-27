@@ -16,8 +16,8 @@ d3.select("head").append("title").text("D3 Bar Chart Happiness");
 d3.select("body").append("h1").text("World Happiness Report");
 d3.select("body").append("p").text("Yang Yang To, 10340238");
 d3.select("body").append("h3").text("Short Description of the bar chart");
-d3.select("body").append("p").text("A bar chart showing the Happiness Score per Country in 2017");
-d3.select("body").append("p").text("Source: Kaggle");
+d3.select("body").append("p").text("A bar chart showing the Happiness Score per Country in 2017. Source: Kaggle");
+d3.select("body").append("p").text("Score:");
 
 // parse in data from csv and fill in datalists
 d3.csv('Happiness2017.csv').then(function(data) {
