@@ -12,7 +12,7 @@ var countrylist= [];
 var happinesslist=[];
 
 // Header text
-d3.select("head").append("title").text("D3 Test");
+d3.select("head").append("title").text("D3 Bar Chart Happiness");
 d3.select("body").append("h1").text("World Happiness Report");
 d3.select("body").append("p").text("Yang Yang To, 10340238");
 d3.select("body").append("h3").text("Short Description of the bar chart");
@@ -41,11 +41,12 @@ d3.csv('Happiness2017.csv').then(function(data) {
 
   // create the tooltip (for when you hover over the bars)
   var tooltip = d3.select('body').append('div')
-      .style('position', 'absolute')
+      .style('position', 'fixed')
       .style('background', 'white')
-      .style('padding', '5 15 px')
+      .style('padding', '5 25 px')
       .style('border-radius','5px')
       .style('opacity', '0');
+      // .append("text").text("hi");
 
   // create an svg ("canvas")
   var svg = d3.select("body")
@@ -66,13 +67,13 @@ d3.csv('Happiness2017.csv').then(function(data) {
                   return i * (height_bar + padding);
                 })
                 .attr('x', 50)
-              // enable a hover function
-              .on('mouseover', function(d){
+              // create a hover function
+              .on('mousemove', function(d){
                 tooltip.transition()
                   .style('opacity', 1)
                 tooltip.html(d)
-                  .style('left',(d3.event.pageX)+'px')
-                  .style('top', (d3.event.pageY) + 'px')
+                  .style('left', (d3.event.PageX) + 'px')
+                  .style('top', (d3.event.PageY + 'px'))
                 d3.select(this).style('opacity', 0.5)
               })
               .on('mouseout', function(d){
