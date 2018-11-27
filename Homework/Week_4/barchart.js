@@ -66,7 +66,7 @@ d3.csv('Happiness2017.csv').then(function(data) {
                   return i * (height_bar + padding);
                 })
                 .attr('x', 50)
-              // hover
+              // enable a hover function
               .on('mouseover', function(d){
                 tooltip.transition()
                   .style('opacity', 1)
