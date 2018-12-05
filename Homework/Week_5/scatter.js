@@ -12,10 +12,10 @@ window.onload = function() {
   d3.select("body").append("h4").text("Yang Yang To, 10340238");
   d3.select("body").append("p").text("An interactive scatterplot of Percentage of Women in Science and Consumer Confidence from 2007 till 2015.");
   d3.select("body").append("p").text("Data Source Women in Science")
-    .on("click", function() { window.open("http://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"); })
+    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"); })
     .attr("id", "datawomen");
   d3.select("body").append("p").text("Data Source Consumer Confidence")
-    .on("click", function() { window.open("http://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015"); })
+    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015"); })
     .attr("id", "dataconsumer");
   // define data
   var womenInScience = "https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"
@@ -35,7 +35,6 @@ window.onload = function() {
       // append datapoints from women in science dataset to the consumer confidence dataset
       var count = 0;
       consConfArray.forEach(function(element){
-        console.log(womenArray[count].time)
         if (element.time == womenArray[count].time){
           element.datapoint2 = womenArray[count].datapoint;
           count++
