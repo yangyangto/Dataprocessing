@@ -1,2 +1,18 @@
 /*  Name: Yang Yang To, Student number:10340238
  CSS file */
+
+body {
+   font-family: "Arial", sans-serif;
+}
+
+#datawomen{
+  color: blue;
+  font-size: 12px;
+  text-decoration-line: underline;
+}
+
+#dataconsumer{
+  color: blue;
+  font-size: 12px;
+  text-decoration-line: underline;
+}
