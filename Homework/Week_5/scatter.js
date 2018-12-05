@@ -6,17 +6,9 @@ var h = 500;
 var padding = 50
 
 window.onload = function() {
-  // append titles
-  d3.select("head").append("title").text("Scatter Plot");
-  d3.select("body").append("h3").text("Scatterplot: Women in Science vs. Consumer Confidence");
-  d3.select("body").append("h4").text("Yang Yang To, 10340238");
-  d3.select("body").append("p").text("An interactive scatterplot of Percentage of Women in Science and Consumer Confidence from 2007 till 2015.");
-  d3.select("body").append("p").text("Data Source Women in Science")
-    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"); })
-    .attr("id", "datawomen");
-  d3.select("body").append("p").text("Data Source Consumer Confidence")
-    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015"); })
-    .attr("id", "dataconsumer");
+  // add text/titles
+  addText();
+
   // define data
   var womenInScience = "https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"
   var consConf = "https://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015"
@@ -59,6 +51,18 @@ window.onload = function() {
 
 };
 
+function addText(){
+  d3.select("head").append("title").text("Scatter Plot");
+  d3.select("body").append("h3").text("Scatterplot: Women in Science vs. Consumer Confidence");
+  d3.select("body").append("h4").text("Yang Yang To, 10340238");
+  d3.select("body").append("p").text("An interactive scatterplot of Percentage of Women in Science and Consumer Confidence from 2007 till 2015.");
+  d3.select("body").append("p").text("Data Source Women in Science")
+    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+DEU+KOR+NLD+PRT+GBR/all?startTime=2007&endTime=2015"); })
+    .attr("id", "datawomen");
+  d3.select("body").append("p").text("Data Source Consumer Confidence")
+    .on("click", function() { window.open("https://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+DEU+KOR+NLD+PRT+GBR.COCONF.A/all?startTime=2007&endTime=2015"); })
+    .attr("id", "dataconsumer");
+};
 
 function transformResponse(data){
   // access data property of the response
@@ -131,6 +135,7 @@ function calcMinMax(array){
 
   minMax = []
   minMax.push(min, max);
+  console.log(minMax);
 
   return minMax
 };
@@ -147,7 +152,7 @@ function yScale(minDomain, maxDomain){
   // create the yscale transformation
   var yscale = d3.scaleLinear()
                   .domain([minDomain, maxDomain])
-                  .range([h - padding, 0]);
+                  .range([h, 0 + padding]);
   return yscale
 };
 
@@ -174,7 +179,7 @@ function legend(svg){
   // add colored circles to the legend
   legend.append("circle")
         .attr("cx", w - 80)
-        .attr("cy", 15)
+        .attr("cy", 370)
         .attr("r", 5)
         .style("fill", function(d){
           return d[1];
@@ -183,7 +188,7 @@ function legend(svg){
   // add country names to the legend
   legend.append("text")
         .attr("x", w - 70)
-        .attr("y", 14)
+        .attr("y", 370)
         .attr("dy", ".35em")
         .text(function(d){
           return d[0];
@@ -269,7 +274,7 @@ function drawGraph(svg, data, x, y){
        }
      })
      .attr("cy", function(d) {
-          return h - padding - y(d.datapoint);
+          return h + padding - y(d.datapoint);
      })
      .attr("fill", function(d) {
        if (d.Country == legendData[0][0]){
@@ -301,7 +306,7 @@ function graphLabels(svg, x, y){
   // add the x axis
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(" + 0 + ",450)")
+    .attr("transform", "translate(" + 0 + ",500)")
     .call(d3.axisBottom(x));
 
   // add y axis
@@ -315,7 +320,7 @@ function graphLabels(svg, x, y){
      .attr("class", "y label")
      .attr("text-anchor", "end")
      .attr("y", 5)
-     .attr("x", -140)
+     .attr("x", -180)
      .attr("dy", ".75em")
      .attr("transform", "rotate(-90)")
      .text("Consumer Confidence");
@@ -325,6 +330,14 @@ function graphLabels(svg, x, y){
      .attr("class", "x label")
      .attr("text-anchor", "end")
      .attr("x", 570)
-     .attr("y", 500)
+     .attr("y", 540)
      .text("Percentage of Women in Science (%)");
+
+  svg.append("text")
+  .attr("class", "x label")
+  .attr("text-anchor", "middle")
+  .attr("x", 430)
+  .attr("y", 35)
+  .style("font-size", "20px")
+  .text("Scatterplot Women in Science & Consumer Confidence");
 };
