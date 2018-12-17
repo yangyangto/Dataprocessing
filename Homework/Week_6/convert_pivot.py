@@ -36,9 +36,10 @@ if __name__ == "__main__":
     INPUT_CSV_BLI = "BLI.csv"
     df = parse_data(INPUT_CSV_BLI, ['Country', 'LOCATION', 'Indicator', 'Inequality','Value'])
     df = select_data(df, 'Inequality', "Total")
-    df = select_data(df, 'Indicator', 'Life satisfaction')
-    # df = df.pivot(index='Country', columns='Indicator', values='Value')
+    # df1 = select_data(df, 'Indicator', 'Life satisfaction')
+    df2 = df.pivot(index='LOCATION', columns='Indicator', values='Value')
 
-    print(df)
+    # print(df1)
+    print(df2)
 
-    convert_json(df, 'BLI3.json')
+    df2.to_json('BLI.json', orient='index')

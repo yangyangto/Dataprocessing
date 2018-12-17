@@ -14,7 +14,7 @@ window.onload = function() {
                         d.properties.name + "<br></span>" +
                         "<strong>Life Satisfaction: </strong><span class='details'>" +
                         format(d.Value) +"</span>");
-              });
+              })
 
   var margin = {top: 0, right: 0, bottom: 0, left: 0},
               width = 800 - margin.left - margin.right,
@@ -102,7 +102,7 @@ function createMap(mapData, otherData, svg, path, tip, color) {
 
           // add new svg for a graph
           var graph = d3.select("#graph").append("svg")
-                                   .attr("width", 250)
+                                   .attr("width", 200)
                                    .attr("height", 530);
 
           // create a graph with the country as title
@@ -209,27 +209,29 @@ function createGraph(otherData, d, graph){
                   .domain([0, 3])
                   .range(['#FCC90A', '#D50000']);
 
-    var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                  return ("<strong>Percentage: </strong><span class='details'>" +
-                          d + "</span>");
-                });
-    graph.call(tip);
+    // set tooltip
+    var tooltip = d3.select("body").append("div")
+                    .style('position','relative')
+                    .style('background', "#d7d7d7")
+                    .style('color', "#ffa500")
+                    .style('border','1px #bdbdbd solid')
+                    .style('opacity', '0.5')
+                    .style('padding', "3px")
+                    .style('border-radius','3px');
+
     // specify x, y and x-label scales
     var xScale =  d3.scaleBand()
       .domain(d3.range(0, 4))
-      .range([35, 250])
+      .range([15, 200])
 
     var yScale = d3.scaleLinear()
       .domain([0, 100])
-      .range([200, 0]);
+      .range([0, 200]);
 
     var labelScale =  d3.scaleBand()
                         .domain(["Employment Rate", "Educational Attainment",
                                  "Water Quality", "Quality of Support Network"])
-                        .range([35, 235])
+                        .range([15, 193])
 
     // create barchart
     graph.selectAll("rect")
@@ -240,28 +242,34 @@ function createGraph(otherData, d, graph){
             .attr("x",function(d,i) {
               return xScale(i); })
             .attr("y", function(d){
-              return (yScale(d.value) + 200)
+              return (400 - yScale(d.value))
             })
             .attr("fill", function(d,i) {
                 return colors(i);
             })
+            .attr("fill-opacity", 0.7)
             .attr("height", function(d){
-              return (200 -yScale(d.value))
+              return yScale(d.value)
             })
 
             // create hover function
             .on('mousemove', function(d){
-              d3.select(this).classed("selected", true)
-              tip.show(d.value);
+              tooltip.transition()
+                .style('opacity', 1)
+              tooltip.html("<strong>Percentage: </strong><span class='details'>"+ d.value + "<strong>%</strong><span class='details'>")
+                .style('left', (d3.event.PageX) + 'px')
+                .style('top', (d3.event.PageY + 'px'))
+              d3.select(this).style('opacity', 0.8)
             })
             .on('mouseout', function(d){
-              d3.select(this).classed("selected", false)
-              tip.hide(d.value);
+              tooltip.transition()
+                .style('opacity', 0)
+              d3.select(this).style('opacity', 1)
             });
 
-    // create axes label
+    // create x-axis label
     graph.append("g")
-          .attr("class", "x axis")
+          .attr("class", "axis")
           .attr("transform", "translate(0," + 400 + ")")
           .call(d3.axisBottom(labelScale).ticks(4))
           .selectAll("text")
@@ -269,20 +277,5 @@ function createGraph(otherData, d, graph){
           .attr("dx", "-.8em")
           .attr("dy", ".15em")
           .attr("transform", "rotate(-63)");
-
-    graph.append("g")
-       .attr("class", "y axis")
-       .attr("transform", "translate(" + 35 + ",200)")
-       .call(d3.axisLeft(yScale));
-
-    graph.append("text")
-         .attr("class", "y label")
-         .attr("text-anchor", "end")
-         .attr("y", 0)
-         .attr("x", -250)
-         .attr("dy", ".75em")
-         .style("font-size", "12px")
-         .attr("transform", "rotate(-90)")
-         .text("Percentage (%)");
   }
 };
