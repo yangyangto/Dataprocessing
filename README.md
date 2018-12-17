@@ -15,6 +15,9 @@ Creating a website with a bar chart with the Happiness Scores per country in 201
 ## Week 5: Scatterplot
 Creating a website with a scatterplot which shows the 'correlation' between Percentage of Women in Science and Consumer Confidence from 2007 till 2015.
 
+## Week 6: Linked View
+Creating a website with a world map which shows the average Life Satisfaction score per country. For these countries, different variables regarding different subject of the Better Life Index are shown in a barchart. 
+
 
 ### Link
 https://yangyangto.github.io/Dataprocessing/
